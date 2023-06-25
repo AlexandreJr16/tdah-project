@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "Munin",
+    "slug": "Munin",
+    "version": "1.0.0",
+   
+    "puglins": ["@react-native-google-sigin/google-sigin"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FFF6EB"
+    }
+  }
+  
+}
