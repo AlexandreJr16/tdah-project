@@ -61,33 +61,26 @@ return(
   </View>
 
   <View>
-        <Texto style={estilos.titulo}>Detalhes</Texto>
+    <Texto style={estilos.titulo}>Detalhes</Texto>
+  </View>
+
+  <View>
+    <Texto style={estilos.titulo_atividade}>Medicamento</Texto>
+    <Texto style={estilos.input_atividade}>{medicamento.medicacao}</Texto>
+  </View>
+
+  <View>
+    <Texto style={estilos.titulo_atividade}>Data</Texto>
+    <Texto style={estilos.input_atividade}>{medicamento.data}</Texto>
+  </View>
+
+  <View style={estilos.areahorario}>
+    <View>
+      <Texto style={estilos.titulo_atividade}>Horário</Texto> 
+      <Texto style={estilos.input_atividade}>{medicamento.hora}</Texto>
     </View>
-
-     <View>
-     <Texto style={estilos.titulo_atividade}>Atividade</Texto>
-        <Texto style={estilos.input_atividade}>{medicamento.medicacao}</Texto>
-        </View>
-
-        <View>
-        <Texto style={estilos.titulo_data}>Data</Texto>
-        <Texto style={estilos.input_atividade}>{medicamento.data}</Texto>
-        </View>
-
-        <View style={estilos.areahorario}>
-
-        <View>
-        <Texto style={estilos.titulo_horarioinicio}>Horário de Início</Texto> 
-        <Texto style={estilos.input_horarioinicio}>{medicamento.horainicio}</Texto>
-        </View>
-
-        <View>
-   <Texto style={estilos.titulo_horariofim}>Horário do Fim</Texto>
-   <Texto style={estilos.input_horariofim}>{medicamento.horafim}</Texto>
-   </View>
-
-        </View>
-        <Texto style={estilos.titulo_descricao}>Descrição/Observações</Texto>
+  </View>
+        <Texto style={estilos.titulo_atividade}>Descrição/Observações</Texto>
         <Texto style={estilos.input_descricao}>{medicamento.descricao}</Texto>
 
        
@@ -184,38 +177,6 @@ input_atividade:{
  borderRadius: 10,
 },
 
-titulo_data:{
-  fontSize: 17,
-  color: "#4ECDB6",
-  marginLeft: 31,
-  marginTop: 30,
-  marginBottom:5,
-},
-
-titulo_horarioinicio:{
-  fontSize: 17,
-  color: "#4ECDB6",
-  marginLeft: 32,
-  marginTop: 30,
-  marginBottom:5,
-  
-},
-
-input_horarioinicio:{
-
-  width: 140,
-  alignItems: "center",
-  marginLeft:31,
-  marginRight: 31,
-  height: 28,
-  fontSize: 16,
-  margin:1,
-  padding: 10,
-  borderWidth: 1,
-  borderColor: '#4ECDB6',
-  height:49,
- borderRadius: 10,
-},
 
 input_horariofim:{
   width: 140,

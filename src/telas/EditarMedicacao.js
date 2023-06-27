@@ -5,6 +5,8 @@ import { firebase } from '../../config';
 import { useNavigation } from '@react-navigation/native';
 
 import Texto from '../component/Texto';
+import TextoInput from '../component/TextoInput';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 export default function EditarMedicacao(props) {
     console.log(props)
@@ -12,8 +14,7 @@ export default function EditarMedicacao(props) {
   const [medicamentos, setMedicamentos] = useState(null);
   const [novoTitulo, setNovoTitulo] = useState('');
   const [novaData, setNovaData] = useState('');
-  const [novaHoraInicio, setNovaHoraInicio] = useState('');
-  const [novaHoraFim, setNovaHoraFim] = useState('');
+  const [novaHora, setNovaHora] = useState('');
   const [novaDescricao, setNovaDescricao] = useState(''); 
 
   const medicamentosId = props.route.params.medicamentosId;
@@ -27,8 +28,7 @@ export default function EditarMedicacao(props) {
           setMedicamentos(data);
           setNovoTitulo(data.medicacao);
           setNovaData(data.data);
-          setNovaHoraInicio(data.horainicio);
-          setNovaHoraFim(data.horafim);
+          setNovaHora(data.hora);
           setNovaDescricao(data.descricao);
         } else {
           console.log('Medicamento não existe');
@@ -44,8 +44,7 @@ export default function EditarMedicacao(props) {
       .update({
         medicacao: novoTitulo,
         data: novaData,
-        horainicio: novaHoraInicio,
-        horafim: novaHoraFim,
+        hora: novaHora,
         descricao: novaDescricao
       })
       .then(() => {
@@ -55,70 +54,139 @@ export default function EditarMedicacao(props) {
         console.log('Erro ao atualizar medicamento:', error);
       });
   };
+
+  const [selectedDate, setSelectedDate] = useState(new Date());
+    
+  const [selectedTime, setSelectedTime] = useState();
+	
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+      
+  const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const showTimePicker = () => {
+    setTimePickerVisibility(true);
+  };
+
+  const hideTimePicker = () => {
+    setTimePickerVisibility(false);
+  };
+
+  const handleConfirm = (date) => {
+    setSelectedDate(date);
+    
+    /*alert("ano selecionada: " + date.getDate());
+    alert("ano selecionada: " + date.getFullYear());
+    alert("mês selecionado: " + date.getMonth());
+    alert("dia selecionado: " + date.getDay());*/
+
+    var month = date.getMonth()+1;
+    handleChangeDate(`${date.getDate()}/${month}/${date.getFullYear()}`);
+
+    hideDatePicker();
+  };
+
+  const handleChangeDate = (date) => {
+    setNovaData(date);
+  };
+
+  const handleConfirmTime = (time) => {
+    setSelectedTime(time);
+
+    const timeString = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    setNovaHora(timeString);
+    hideTimePicker();
+  };
+
 return(
-    <View style={estilos.container}>
-      {medicamentos ? (
-        <View style={estilos.containerformulario}>
-          <View>
-    <TouchableOpacity style={estilos.areaicon} onPress={()=> props.navigation.navigate('Medicação')}>
-    <AntDesign  name="arrowleft" size={30} color="#4ECDB6"  />
-    </TouchableOpacity>
-    </View>
-
-    <View>
-        <Texto style={estilos.titulo}>Editar</Texto>
-    </View>
-
-          <Texto style={estilos.titulo_atividade}>Título</Texto>
-          <TextInput
-            style={estilos.input_atividade}
-            value={novoTitulo}
-            onChangeText={setNovoTitulo}
-          />
-
-          <Texto style={estilos.titulo_data}>Data:</Texto>
-          <TextInput
-            style={estilos.input_atividade}
-            value={novaData}
-            onChangeText={setNovaData}
-          />
-           <View style={estilos.areahorario}>
-          <View>
-          <Texto style={estilos.titulo_horarioinicio}>Hora Início:</Texto>
-          <TextInput
-            style={estilos.input_horarioinicio}
-            value={novaHoraInicio}
-            onChangeText={setNovaHoraInicio}
-          />
-          </View>
-          <View>
-          <Texto style={estilos.titulo_horariofim}>Hora Fim:</Texto>
-          <TextInput
-            style={estilos.input_horariofim}
-            value={novaHoraFim}
-            onChangeText={setNovaHoraFim}
-          />
-          </View>
-          
-          </View>
-
-          <Texto style={estilos.titulo_descricao}>Descrição:</Texto>
-          <TextInput
-            style={estilos.input_descricao}
-            value={novaDescricao}
-            onChangeText={setNovaDescricao}
-            multiline
-          />
-
-          <TouchableOpacity style={estilos.touchable_atividade} onPress={handleSalvar}>
-            <Texto style={estilos.text_atividade}>Salvar</Texto>
+  <View style={estilos.container}>
+    {medicamentos ? (
+      <View style={estilos.containerformulario}>
+        <View>
+          <TouchableOpacity style={estilos.areaicon} onPress={()=> props.navigation.navigate('Medicação')}>
+            <AntDesign  name="arrowleft" size={30} color="#4ECDB6"  />
           </TouchableOpacity>
         </View>
+
+        <View>
+          <Texto style={estilos.titulo}>Editar</Texto>
+        </View>
+
+        <Texto style={estilos.titulo_atividade}>Medicamento</Texto>
+        <TextoInput
+          style={estilos.input_atividade}
+          value={novoTitulo}
+          onChangeText={setNovoTitulo}
+        />
+
+      <View>
+        <Texto style={estilos.titulo_atividade}>Data</Texto>
+
+        <TouchableOpacity onPress={showDatePicker}>
+          <Texto style={estilos.input_atividade}>
+            {novaData}
+          </Texto>
+        </TouchableOpacity>
+
+        <DateTimePickerModal
+            style={{width: "100%"}}
+            value={selectedDate}
+            isVisible={isDatePickerVisible}
+            mode="date"
+            format='DD/MM/YYYY'
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
+        />
+      </View>
+        
+
+        <View>
+          <View>
+            <Texto style={estilos.titulo_atividade}>Hora</Texto>
+
+            <TouchableOpacity onPress={showTimePicker}>
+              <Texto style={estilos.input_atividade}>
+                {novaHora}
+              </Texto>
+            </TouchableOpacity>
+
+            <DateTimePickerModal
+              style={{width: "100%"}}
+              value={selectedTime}
+              isVisible={isTimePickerVisible}
+              mode="time"
+              format='MM:HH'
+              onConfirm={handleConfirmTime}
+              onCancel={hideTimePicker}
+            />
+
+          </View>
+        </View>
+
+        <Texto style={estilos.titulo_atividade}>Descrição:</Texto>
+        <TextInput
+          style={estilos.input_descricao}
+          value={novaDescricao}
+          onChangeText={setNovaDescricao}
+          multiline
+        />
+
+        <TouchableOpacity style={estilos.touchable_atividade} onPress={handleSalvar}>
+          <Texto style={estilos.text_atividade}>Salvar</Texto>
+        </TouchableOpacity>
+      </View>
       ) : (
         <Text style={estilos.text_carregando}>Carregando...</Text>
       )}
-    </View>
-  );
+  </View>
+);
 };
 
 const estilos = StyleSheet.create({
@@ -170,75 +238,6 @@ input_atividade:{
   borderColor: '#4ECDB6',
   height:49,
  borderRadius: 10,
-},
-
-titulo_data:{
-  fontSize: 17,
-  color: "#4ECDB6",
-  marginLeft: 31,
-  marginTop: 30,
-  marginBottom:5,
-},
-
-titulo_horarioinicio:{
-  fontSize: 17,
-  color: "#4ECDB6",
-  marginLeft: 32,
-  marginTop: 30,
-  marginBottom:5,
-  
-},
-
-input_horarioinicio:{
-
-  width: 140,
-  alignItems: "center",
-  marginLeft:31,
-  marginRight: 31,
-  height: 28,
-  fontSize: 16,
-  margin:1,
-  padding: 10,
-  borderWidth: 1,
-  borderColor: '#4ECDB6',
-  height:49,
- borderRadius: 10,
-},
-
-input_horariofim:{
-  width: 140,
-  alignItems: "center",
-  marginLeft: 35,
-  marginRight: 31,
-  height: 28,
-  fontSize: 16,
-  margin:1,
-  padding: 10,
-  borderWidth: 1,
-  borderColor: '#4ECDB6',
-  height:49,
- borderRadius: 10,
-},
-
-titulo_horariofim:{
-  fontSize: 17,
-  color: "#4ECDB6",
-  marginLeft: 37,
-  marginTop: 30,
-  marginBottom:5,
-},
-
-areahorario:{
-  flexDirection: 'row',
-},
-
-titulo_descricao:{
-  fontSize: 17,
-  color: "#4ECDB6",
-  marginLeft: 31,
-  marginTop: 30,
-  marginBottom:5,
-
 },
 
 input_descricao:{

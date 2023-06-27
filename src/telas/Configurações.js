@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, confirm } from 'react-native';
-import { firebase } from '../../config';
+import { firebase, db } from '../../config';
 import { useState, useEffect } from 'react';
 import { Ionicons, MaterialIcons, Feather, FontAwesome, AntDesign, Entypo} from '@expo/vector-icons';
 import Texto from '../component/Texto';
@@ -11,43 +11,26 @@ export default function Configurações (props){
   const [ name, setName ] = useState('');
   const [ email, setEmail ] = useState('');
   const [ showConfirmation, setShowConfirmation] = useState(false);
-  const [ showConfirmationexcluir, setShowConfirmationexcluir] = useState(false);
+  const [user, setUser] = useState(null);
+
+useEffect(() => {
+  const currentUser = firebase.auth().currentUser;
+  if (currentUser) {
+    setUser(currentUser);
+  }
+}, []);
 
   const handlePress = () => {
     setShowConfirmation(true);
   };
 
   const handleConfirm = () => {
-    // Lógica para lidar com a confirmação
     setShowConfirmation(false);
     firebase.auth().signOut()
   };
 
   const handleCancel = () => {
     setShowConfirmation(false);
-  };
-
-  const handlePressexcluir = () => {
-    setShowConfirmationexcluir(true);
-  };
-
-  const handleConfirmexcluir = () => {
-    // Lógica para lidar com a confirmação
-    setShowConfirmationexcluir(false);
-    firebase.firestore().collection('users')
-    .doc(userId)
-    .delete()
-    .then(() => {
-      props.navigation.navigate('Apresentacao');
-    })
-    .catch((error) => {
-      console.log('Erro ao deletar usuário:', error);
-    });
-};
-  
-
-  const handleCancelexcluir = () => {
-    setShowConfirmationexcluir(false);
   };
   
     useEffect(()=>{
@@ -64,17 +47,17 @@ export default function Configurações (props){
     }, [])
 
     useEffect(()=>{
-        firebase.firestore().collection('users')
-        .doc(firebase.auth().currentUser.uid).get()
-        .then((snapshot) => {
-          if(snapshot.exists){
-            setEmail(snapshot.data())
-          }
-          else{
-            console.log('Usuário não existe')
-          }
-        })
-      }, []);
+      firebase.firestore().collection('users')
+      .doc(firebase.auth().currentUser.uid).get()
+      .then((snapshot) => {
+        if(snapshot.exists){
+          setEmail(snapshot.data())
+        }
+        else{
+          console.log('Usuário não existe')
+        }
+      })
+    }, []); 
 
       const changePassword = () => {
         firebase.auth().sendPasswordResetEmail(firebase.auth().currentUser.email)
@@ -85,7 +68,7 @@ export default function Configurações (props){
         })
       }
 
-      
+
     return( <>
 
   <View style={estilos.container}>
@@ -101,7 +84,7 @@ export default function Configurações (props){
     <FontAwesome style={estilos.imageperfilconfig} name="user-circle-o" size={80} color="black" />
     <View style={estilos.column}>
     <Texto style={estilos.textnomeuser}>{name.name}</Texto>
-    <Texto style={estilos.textemailuser}>{email.email}</Texto>
+    <Texto style={estilos.textemailuser}>{user && user.email}</Texto>
 
     </View>
      
@@ -111,10 +94,26 @@ export default function Configurações (props){
     <Texto style={estilos.titleseg}>Segurança</Texto>
     <View style={estilos.containerconfig}>
 
-<TouchableOpacity  >
+    <TouchableOpacity onPress={()=> props.navigation.navigate('EditarNome')}>
         <View style={estilos.row}>
           
-        <Entypo style={estilos.icon} name="email" size={22} color="black" />
+        <Ionicons style={estilos.icon} name="person" size={24} color="#7FB7C3" />
+        <View style={estilos.column}>
+         <Texto style={estilos.textemail}>Nome</Texto>
+         <Texto style={estilos.textalteraremail}>Alterar nome</Texto>
+        
+         <View style={estilos.line}/>
+        </View>
+
+        <AntDesign style={estilos.iconavancaremail} name="right" size={24} color="black" /> 
+        
+        </View>
+</TouchableOpacity>
+
+<TouchableOpacity onPress={()=>props.navigation.navigate('EditarEmail')}>
+        <View style={estilos.row}>
+          
+        <Entypo style={estilos.icon} name="email" size={22} color="#7FB7C3" />
         <View style={estilos.column}>
          <Texto style={estilos.textemail}>Email</Texto>
          <Texto style={estilos.textalteraremail}>Alterar email</Texto>
@@ -130,7 +129,7 @@ export default function Configurações (props){
 <TouchableOpacity onPress={()=>changePassword()}>
         <View style={estilos.row}>
 
-        <AntDesign style={estilos.icon} name="key" size={22} color="black" />
+        <AntDesign style={estilos.icon} name="key" size={22} color="#7FB7C3" />
         <View style={estilos.column}>
          <Texto style={estilos.textemail}>Senha</Texto>
          <Texto style={estilos.textalteraremail}>Alterar senha</Texto>
@@ -147,26 +146,13 @@ export default function Configurações (props){
     <TouchableOpacity onPress={() => props.navigation.navigate('EditarIdioma')}>
         <View style={estilos.row}>
 
-        <Ionicons style={estilos.icon} name="language-outline" size={22} color="black" />
+        <Ionicons style={estilos.icon} name="language-outline" size={22} color="#7FB7C3" />
          <View style={estilos.column}>
            <Texto style={estilos.textemail}>Idioma</Texto>
            <Texto style={estilos.textalteraremail}>Alterar o idioma do aplicativo</Texto>
          <View style={estilos.lineidioma}/>
           </View>
             <AntDesign style={estilos.iconavancaridioma} name="right" size={24} color="black" /> 
-        </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity>
-        <View style={estilos.row}>
-
-        <MaterialIcons  style={estilos.icon} name="record-voice-over" size={24} color="black" />
-        <View style={estilos.column}>
-         <Texto style={estilos.textemail}>Voz do aplicativo</Texto>
-         <Texto style={estilos.textalteraremail}>Configurar a voz do aplicativo</Texto>
-         <View style={estilos.linevoz}/>
-        </View>
-        <AntDesign style={estilos.iconavancarvoz} name="right" size={24} color="black" /> 
         </View>
         </TouchableOpacity>
     </View>
@@ -179,7 +165,7 @@ export default function Configurações (props){
        
         <View style={estilos.row}>
 
-        <Feather  style={estilos.icon} name="log-out" size={22} color="black" />
+        <Feather  style={estilos.icon} name="log-out" size={22} color="#7FB7C3" />
         <View style={estilos.column}>
          <Texto style={estilos.textemail}>Sair</Texto>
          <Texto style={estilos.textalteraremail}>Sair da sua conta</Texto>
@@ -189,18 +175,33 @@ export default function Configurações (props){
         </View>
 
         </TouchableOpacity>
-        {showConfirmation && (
+        
+    </View>
+
+    {showConfirmation && (
+        <View style={estilos.containerconfirma}>
+
         <View style={estilos.confirmationContainer}>
-          <Texto>Deseja confirmar?</Texto>
-          <TouchableOpacity onPress={handleConfirm}>
-            <Texto>Confirmar</Texto>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleCancel}>
-            <Texto>Cancelar</Texto>
-          </TouchableOpacity>
+         <Texto style={estilos.title}>Tem certeza que deseja sair?</Texto>
+        
+         <View style={estilos.row2}>
+        
+         <TouchableOpacity onPress={handleConfirm}>
+           <Texto style={estilos.textobotao}>Sair</Texto>
+         </TouchableOpacity>
+        
+         <View style={estilos.linha}/>
+        
+         <TouchableOpacity onPress={handleCancel}>
+           <Texto style={estilos.textobotao}>Cancelar</Texto>
+         </TouchableOpacity>
+        
+        </View>
+        
+        </View>
+        
         </View>
       )}
-    </View>
    
   </View>
 
@@ -214,17 +215,34 @@ container:{
     backgroundColor:"#FFF6EB",
     flex: 1,
 },
-confirmationContainer: {
-  position: 'absolute',
+
+confirmationContainer:{
   backgroundColor: 'white',
-  padding: 70,
-  borderRadius: 8,
-  elevation: 4,
- top:-100,
+  borderRadius: 10,
+  alignItems: 'center',
+  justifyContent: 'center',
+  height: '45%',
+  width: 300,
+  top: -200,
+  shadowColor: 'gray',
+  shadowOffset: {width: 0, height: 1},
+  shadowOpacity: 0.8,
+  shadowRadius: 100,
+  elevation: 7,
 },
+
+containerconfirma:{
+  alignItems: 'center',
+  
+},
+
 row:{
     flexDirection: 'row',
-    alignItems: 'center',
+},
+
+row2:{
+  flexDirection: 'row',
+  marginLeft: 35,
 },
 
 iconvoltarconfig:{
@@ -239,9 +257,9 @@ containertitle:{
 },
 
 titleconfig:{
-    fontWeight: 'bold',
     fontSize: 20,
-    marginTop: 40,
+    marginTop: 35,
+    color: '#7FB7C3',
 },
 
 imageperfilconfig:{
@@ -275,16 +293,16 @@ containerconfig:{
     marginLeft: 28,
     marginBottom: 0,
     borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#777474',
     flexDirection: 'column',
     top: 5,
     padding:5,
+    shadowColor: 'black',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.5,
 
 },
 
 titleseg:{
-    fontWeight: 'bold',
     fontSize: 16,
     marginLeft: 40,
     paddingTop: 20,
@@ -294,42 +312,28 @@ line: {
     height: 1,
     backgroundColor: '#4D4D4D',
     marginVertical: 10,
-    width: '350%',
+    width: '310%',
   },
 
   linesenha: {
     height: 1,
     backgroundColor: '#4D4D4D',
     marginVertical: 10,
-    width: '337%',
+    width: '300%',
   },
 
 lineidioma: {
     height: 1,
     backgroundColor: '#4D4D4D',
     marginVertical: 10,
-    width: '153%',
-  },
-  
-  linevoz: {
-    height: 1,
-    backgroundColor: '#4D4D4D',
-    marginVertical: 10,
-    width: '152%',
-  },
-
-lineexcluir: {
-    height: 1,
-    backgroundColor: '#4D4D4D',
-    marginVertical: 10,
-    width: '265%',
+    width: '136%',
   },
   
   linesair: {
     height: 1,
     backgroundColor: '#4D4D4D',
     marginVertical: 10,
-    width: '260%',
+    width: '231%',
   },  
 
 icon:{
@@ -344,33 +348,40 @@ textemail:{
 },
 
 iconavancaremail:{
-  top: 16,
-  left: 190,
+  top: 19,
+  left: 189,
 },
 
 iconavancarsenha:{
-  top: 16,
+  top: 18,
   left: 187,
 },
 
 iconavancaridioma:{
-  top: 16,
-  left: 78,
-},
-
-iconavancarvoz:{
-  top: 16,
-  left: 75,
-},
-
-iconavancarexcluir:{
-  top: 16,
-  left: 162,
+  top: 20,
+  left: 63,
 },
 
 iconavancarsair:{
-  top: 16,
-  left: 160,
+  top: 20,
+  left: 156,
+},
+
+linha:{
+  marginVertical: 2,
+  width: 1,
+  backgroundColor: 'black',
+  marginHorizontal: 20,
+},
+
+title:{
+  paddingBottom: 20,
+  fontSize: 16,
+},
+
+textobotao:{
+  fontSize: 16,
+
 },
 
 });

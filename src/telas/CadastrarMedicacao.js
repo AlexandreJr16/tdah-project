@@ -3,16 +3,29 @@ import { View, TextInput, StyleSheet, TouchableOpacity , Keyboard, Text, ScrollV
 import { AntDesign } from '@expo/vector-icons'; 
 import { firebase } from '../../config';
 import Texto from '../component/Texto';
+import TextoInput from '../component/TextoInput'
 
+//import DatePicker from 'react-native-datepicker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { format } from 'date-fns';
 
 
 export default function CadastrarMedicacao(props){
     console.log(props)
+
+    const [buttonText, setButtonText] = useState('Selecionar Data');
+
+    
+    const [buttonTime, setButtonTime] = useState('Selecionar Horário');
+    
+    const [selectedDate, setSelectedDate] = useState(new Date());
+    
+    const [selectedTime, setSelectedTime] = useState();
+    
     const [state, setState] = useState({
         medicacao: '',
         data: '',
-        horainicio: '',
-        horafim: '',
+        hora: '',
         descricao: '' 
       });
     
@@ -27,21 +40,67 @@ export default function CadastrarMedicacao(props){
           await firebase.firestore().collection('medicamento').add({
             medicacao: state.medicacao,
             data: state.data,
-            horainicio: state.horainicio,
-            horafim: state.horafim,
+            hora: state.hora,
+            //horafim: state.horafim,
             descricao: state.descricao
           });
           props.navigation.navigate('Medicação');
         }
       };
 
-      const [selectedDate, setSelectedDate] = useState(null);
+      const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+      
+      const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
 
-      changeDate = (valor) => {
-        this.setState({
-          data: valor
-        })
-      }
+      const showDatePicker = () => {
+        setDatePickerVisibility(true);
+      };
+
+      const hideDatePicker = () => {
+        setDatePickerVisibility(false);
+      };
+
+      const showTimePicker = () => {
+        setTimePickerVisibility(true);
+      };
+
+      const hideTimePicker = () => {
+        setTimePickerVisibility(false);
+      };
+
+
+      const handleChangeDate = (date) => {
+        setState((prevState) => ({
+          ...prevState,
+          data: date,
+        }));
+      };
+
+      const handleConfirm = (date) => {
+        setSelectedDate(date);
+        
+        /*alert("ano selecionada: " + date.getDate());
+        alert("ano selecionada: " + date.getFullYear());
+        alert("mês selecionado: " + date.getMonth());
+        alert("dia selecionado: " + date.getDay());*/
+
+        var month = date.getMonth()+1;
+        handleChangeDate(`${date.getDate()}/${month}/${date.getFullYear()}`);
+        setButtonText(`${date.getDate()}/${month}/${date.getFullYear()}`);
+
+        hideDatePicker();
+      };
+
+      const handleConfirmTime = (time) => {
+        setSelectedTime(time);
+
+        const timeString = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        handleChangeText('hora', timeString);
+        setButtonTime(timeString)
+        hideTimePicker();
+      };
+
+
     return(
     <View style={estilos.container}>
       <View style={estilos.containerformulario}>
@@ -65,44 +124,63 @@ export default function CadastrarMedicacao(props){
             />
 
           <Texto style={estilos.titulo_data}>Data</Texto>
-          <TextInput
-            style={estilos.input_atividade}
-            onChangeText={(value) => handleChangeText('data', value)}
-          />
 
-          <View style={estilos.areahorario}>
+          <View>
+            <TouchableOpacity onPress={showDatePicker}>
+              <Texto style={estilos.input_horarioData}>{buttonText}</Texto>
+            </TouchableOpacity>
+
+            <DateTimePickerModal
+              style={{width: "100%"}}
+              value={selectedDate} // Passe a data como objeto Date
+              isVisible={isDatePickerVisible}
+              mode="date"
+              format='DD/MM/YYYY'
+              onConfirm={handleConfirm}
+              onCancel={hideDatePicker}
+            />
+          </View>
+
+
+          <View>
             <View>
-              <Texto style={estilos.titulo_horarioinicio}>Horário de Início</Texto> 
-              <TextInput
-              style={estilos.input_horarioinicio}
-              onChangeText={(value) => handleChangeText('horainicio', value)}
-              />
+              <Texto style={estilos.titulo_horario}>Horário</Texto> 
             </View>
 
+
             <View>
-              <Texto style={estilos.titulo_horariofim}>Horário do Fim</Texto>
-              <TextInput style={estilos.input_horariofim}
-              
-              onChangeText={(value) => handleChangeText('horafim', value)}
-              />
+              <TouchableOpacity onPress={showTimePicker}>
+                <Texto style={estilos.input_horarioData}>
+                  {buttonTime}
+                </Texto>
+              </TouchableOpacity>
+
+                <DateTimePickerModal
+                  style={estilos.areahorario}
+                  value={selectedTime} // Passe a data como objeto Date
+                  isVisible={isTimePickerVisible}
+                  mode="time"
+                  format='MM:HH'
+                  is24Hour
+                  onConfirm={handleConfirmTime}
+                  onCancel={hideTimePicker}
+                />
             </View>
           </View>
 
           <Texto style={estilos.titulo_descricao}>Descrição/Observações</Texto>
 
-          <TextInput
+          <TextoInput
             style={estilos.input_descricao}
             onChangeText={(value) => handleChangeText('descricao', value)}
           />
-        </View>
+          </View>
 
         <TouchableOpacity style={estilos.touchable_atividade} onPress={addMedicacao}>
           <Texto style={estilos.text_atividade}>Adicionar</Texto>
         </TouchableOpacity>
-        
-        </ScrollView>
-        
 
+        </ScrollView>
       </View>
     </View>
     );
@@ -167,7 +245,7 @@ const estilos = StyleSheet.create({
     marginBottom:5,
   },
   
-  titulo_horarioinicio:{
+  titulo_horario:{
     fontSize: 17,
     color: "#4ECDB6",
     marginLeft: 32,
@@ -176,11 +254,10 @@ const estilos = StyleSheet.create({
     
   },
   
-  input_horarioinicio:{
-  
-    width: 140,
-    alignItems: "center",
-    marginLeft:31,
+  input_horarioData:{
+    width: 350,
+    textAlign: "center",
+    marginLeft: 31,
     marginRight: 31,
     height: 28,
     fontSize: 16,
@@ -190,29 +267,6 @@ const estilos = StyleSheet.create({
     borderColor: '#4ECDB6',
     height:49,
    borderRadius: 10,
-  },
-  
-  input_horariofim:{
-    width: 140,
-    alignItems: "center",
-    marginLeft: 35,
-    marginRight: 31,
-    height: 28,
-    fontSize: 16,
-    margin:1,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#4ECDB6',
-    height:49,
-   borderRadius: 10,
-  },
-  
-  titulo_horariofim:{
-    fontSize: 17,
-    color: "#4ECDB6",
-    marginLeft: 37,
-    marginTop: 30,
-    marginBottom:5,
   },
   
   areahorario:{

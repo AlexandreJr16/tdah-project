@@ -59,11 +59,9 @@ export default function CadastrarNota(props) {
       <AntDesign name="check" size={24} color="white" />
       </TouchableOpacity>
 
-      
     </View>
   );
 }
-
 
 const estilos = StyleSheet.create({
 

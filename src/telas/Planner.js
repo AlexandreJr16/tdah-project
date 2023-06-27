@@ -142,7 +142,7 @@ const Planner = (props) => {
     <View style={estilos.container}>
       <View style={estilos.row}>
         <View style={estilos.direcaotopplanner}>
-          <Text style={estilos.nomeusuario}>Olá {name.name}</Text>
+          <Text style={estilos.nomeusuario}>Olá, {name.name}</Text>
           <Text style={estilos.titleplanner}>Planner</Text>
         </View>
       </View>

@@ -50,9 +50,9 @@ const Cadastro = (props) =>{
     setIsFocusednome(false);
   };
 
-  const handleInputChangenome = (name) =>{
+  const handleInputChangenome = (name) => {
     setName(name);
-  }
+  };
 
   const handleInputChangeSenha = (password) =>{
     setSenha(password);
@@ -113,6 +113,7 @@ const Cadastro = (props) =>{
         onChangeText={(name) => {setName(name); handleInputChangenome}}
         autoCapitalize='none'
         autoCorrect={false}
+        
       />
     </View>
 
@@ -128,13 +129,13 @@ const Cadastro = (props) =>{
         autoCapitalize='none'
         autoCorrect={false}
       />
-    </View>
+</View>
 
 
     <View>
   <Texto style={[estilos.placeholdersenha, isFocusedsenha || password.length > 0 ? estilos.placeholderFocusedsenha: null,]}>
         Senha
-      </Texto>
+  </Texto>
     <View style={estilos.inputAreasenha}>
       <TextInput style={estilos.inputsenha} onFocus={handleFocussenha}
         onBlur={handleBlursenha} onChangeText={(password) => {setPassword(password); handleInputChangeSenha}}
@@ -165,8 +166,9 @@ const Cadastro = (props) =>{
      <Image source={google} style={estilos.icongoogle}/>
       <Texto style={estilos.textoBotaogoogle} >Continuar com o Google </Texto>
     </TouchableOpacity>
+
   </ScrollView>
-  </View>   
+  </View>
 
   </View>
 
@@ -209,7 +211,7 @@ titlecadastro:{
   textAlign:'center',
   color: '#8CC06B',
   fontSize: 37,
-  fontWeight: 'bold',   
+  fontWeight: '500',   
 },
 
 textnome:{
@@ -220,19 +222,19 @@ textnome:{
  
 },
 
-placeholder: {
+placeholdernome: {
   fontSize: 15,
     color: '#8CC06B',
     position: 'absolute',
     left: 15,
-    top: 92,
+    top: 47,
     backgroundColor: 'transparent',
     zIndex: 1,
 },
 
-placeholderFocused: {
+placeholderFocusednome: {
   fontSize: 13,
-    top: 69,
+    top: 24,
     backgroundColor: '#fff',
     padding: 0,
     zIndex: 2,
@@ -240,17 +242,17 @@ placeholderFocused: {
     textAlign: 'center',
 },
 
-placeholdernome: {
+placeholder: {
   fontSize: 15,
     color: '#8CC06B',
     position: 'absolute',
     left: 15,
-    top: 54,
+    top: 52,
     backgroundColor: 'transparent',
     zIndex: 1,
 },
 
-placeholderFocusednome: {
+placeholderFocused: {
   fontSize: 13,
     top: 29,
     backgroundColor: '#fff',
@@ -281,19 +283,19 @@ placeholderFocusedsenha: {
 },
 
 inputnome:{
-  alignItems: "center",
   marginHorizontal: 2,
+  alignItems: "center",
   margin: 1,
   height: 50,
   width: 365,
   borderColor: '#8CC06B',
   borderWidth: 1,
-  fontSize: 16,
+  color: '#000',
   padding: 15,
   borderRadius: 10,
   backgroundColor: '#fff',
-  justifyContent: 'space-between',
-  top:40,
+  marginTop: 35,
+  fontSize: 16,
    
 },
 
@@ -310,7 +312,7 @@ inputemail:{
   padding: 15,
   borderRadius: 10,
   backgroundColor: '#fff',
-  marginTop: 80,
+  marginTop: 40,
   fontSize: 16,
 
 },
@@ -348,7 +350,7 @@ icon:{
 },
 
 buttoncadastrar:{
-  top: 90,
+  marginTop: 80,
   backgroundColor:"#8CC06B",
   paddingVertical: 12,
   borderRadius: 10,
@@ -370,17 +372,18 @@ text_ou:{
   marginTop: 15,
   color:"#4D4D4D",
   padding:9,
-  marginTop: 105,
+  marginTop: 15,
 },
 
 buttongoogle:{
-  marginTop: 14,
+  marginTop: 16,
   backgroundColor:"#fff",
   paddingVertical:12,
   borderRadius: 10,
   borderColor: "#8CC06B",
   borderWidth: 1,
   flexDirection: 'row',
+  margin: 1,
 },
 
 textoBotaogoogle:{
@@ -388,7 +391,6 @@ textoBotaogoogle:{
   color: '#8CC06B',
   fontSize: 16,
   marginLeft:'10%',
-  
   
 },
 
@@ -414,7 +416,7 @@ line: {
   backgroundColor: '#4D4D4D',
   marginVertical: 13,
   width: 162,
-  marginTop: 129,
+  marginTop: 39,
 },
 
 iconvoltar:{
