@@ -5,7 +5,6 @@ import { firebase } from '../../config';
 import Texto from '../component/Texto';
 import TextoInput from '../component/TextoInput'
 
-//import DatePicker from 'react-native-datepicker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { format } from 'date-fns';
 
@@ -15,7 +14,6 @@ export default function CadastrarMedicacao(props){
 
     const [buttonText, setButtonText] = useState('Selecionar Data');
 
-    
     const [buttonTime, setButtonTime] = useState('Selecionar Horário');
     
     const [selectedDate, setSelectedDate] = useState(new Date());
@@ -146,8 +144,7 @@ export default function CadastrarMedicacao(props){
             <View>
               <Texto style={estilos.titulo_horario}>Horário</Texto> 
             </View>
-
-
+            
             <View>
               <TouchableOpacity onPress={showTimePicker}>
                 <Texto style={estilos.input_horarioData}>

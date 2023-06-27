@@ -11,10 +11,12 @@ import {
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { firebase } from "../../config";
-import { ListItem } from "react-native-elements";
-import DiaPng from "../../assets/dia.png";
-import TardePng from "../../assets/tarde.png";
-import NoitePng from "../../assets/noite.png";
+import { ListItem, CheckBox } from "react-native-elements";
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+import DiaPng from "../../assets/dia2.png";
+import TardePng from "../../assets/tarde2.png";
+import NoitePng from "../../assets/noite2.png";
 
 const Planner = (props) => {
   const [name, setName] = useState("");
@@ -30,6 +32,26 @@ const Planner = (props) => {
   const [atividadesOutrosDiasNoite, setAtividadesOutrosDiasNoite] = useState(
     []
   );
+
+  const [selecionadoManha, setSelecionadoManha] = useState(
+    new Array(atividadesManhaHoje.length).fill(false)
+  );
+  const [selecionadoTarde, setSelecionadoTarde] = useState(
+    new Array(atividadesTardeHoje.length).fill(false)
+  );
+  const [selecionadoNoite, setSelecionadoNoite] = useState(
+    new Array(atividadesNoiteHoje.length).fill(false)
+  );
+  const [selecionadoOutrosDiasManha, setSelecionadoOutrosDiasManha] = useState(
+    new Array(atividadesOutrosDiasManha.length).fill(false)
+  );
+  const [selecionadoOutrosDiasTarde, setSelecionadoOutrosDiasTarde] = useState(
+    new Array(atividadesOutrosDiasTarde.length).fill(false)
+  );
+  const [selecionadoOutrosDiasNoite, setSelecionadoOutrosDiasNoite] = useState(
+    new Array(atividadesOutrosDiasNoite.length).fill(false)
+  );
+  
 
   useEffect(() => {
     firebase
@@ -142,7 +164,7 @@ const Planner = (props) => {
     <View style={estilos.container}>
       <View style={estilos.row}>
         <View style={estilos.direcaotopplanner}>
-          <Text style={estilos.nomeusuario}>Olá, {name.name}</Text>
+          <Text style={estilos.nomeusuario}>Olá {name.name}!</Text>
           <Text style={estilos.titleplanner}>Planner</Text>
         </View>
       </View>
@@ -179,207 +201,261 @@ const Planner = (props) => {
       )}
 
       {selectedView === "Hoje" ? (
-        <ScrollView style={estilos.contentAtividade}>
-          <View style={estilos.divisaoParteDia}>
-            <Image style={estilos.imgHora} source={DiaPng} />
+     <ScrollView style={estilos.contentAtividade}>
+  <View style={estilos.divisaoParteDia}>
+    <Image style={estilos.imgHora} source={DiaPng} />
 
-            {atividadesManhaHoje.map((item) => (
-              <ListItem
-                style={estilos.caixaAtividade}
-                key={item.id}
-                bottomDivider
-                onPress={() => {
-                  props.navigation.navigate("Detalhes", {
-                    atividadeId: item.id,
-                  });
-                }}
-              >
-                <ListItem.Content style={estilos.infoCaixa}>
-                  <ListItem.Subtitle>
-                    <Text style={estilos.textoHorario}>
-                      {`Início: ${item.horainicio}`}
-                    </Text>
-                  </ListItem.Subtitle>
-                  <ListItem.Title style={estilos.textoAtividade}>
-                    <Text style={estilos.textoAtividade}>{item.atividade}</Text>
-                  </ListItem.Title>
-                  <ListItem.Subtitle>
-                    <Text style={estilos.textoHorario}>
-                      {` Fim: ${item.horafim}`}
-                    </Text>
-                  </ListItem.Subtitle>
-                </ListItem.Content>
-              </ListItem>
-            ))}
+    {atividadesManhaHoje.map((item, index) => (
+      <View style={estilos.linha} key={item.id}>
+        <CheckBox
+          containerStyle={estilos.check}
+          checkedIcon={<Icon name="check" size={24} color="green" />}
+          uncheckedIcon={<Icon name="check" size={24} color="transparent" />}
+          checked={selecionadoManha[index]}
+          onPress={() => {
+            const novoSelecionadoManha = [...selecionadoManha];
+            novoSelecionadoManha[index] = !selecionadoManha[index];
+            setSelecionadoManha(novoSelecionadoManha);
+          }}
+        />
+
+        <TouchableOpacity
+          style={[
+            estilos.caixaAtividade,
+            selecionadoManha[index] && estilos.caixaAtividadeSelecionada,
+          ]}
+          onPress={() => {
+            props.navigation.navigate("Detalhes", {
+              atividadeId: item.id,
+            });
+          }}
+        >
+          <View style={estilos.infoCaixa}>
+            <Text style={estilos.textoHorario}>
+              {`Início: ${item.horainicio}`}
+            </Text>
+            <Text style={estilos.textoAtividade}>{item.atividade}</Text>
+            <Text style={estilos.textoHorario}>{` Fim: ${item.horafim}`}</Text>
           </View>
+        </TouchableOpacity>
+      </View>
+    ))}
+  </View>
 
-          <View style={estilos.divisaoParteDia}>
-            <Image style={estilos.imgHora} source={TardePng} />
+  <View style={estilos.divisaoParteDia}>
+    <Image style={estilos.imgHora} source={TardePng} />
 
-            {atividadesTardeHoje.map((item) => (
-              <ListItem
-                style={estilos.caixaAtividade}
-                key={item.id}
-                bottomDivider
-                onPress={() => {
-                  props.navigation.navigate("Detalhes", {
-                    atividadeId: item.id,
-                  });
-                }}
-              >
-                <ListItem.Content style={estilos.infoCaixa}>
-                  <ListItem.Subtitle>
-                    <Text style={estilos.textoHorario}>
-                      {`Início: ${item.horainicio}`}
-                    </Text>
-                  </ListItem.Subtitle>
-                  <ListItem.Title style={estilos.textoAtividade}>
-                    <Text style={estilos.textoAtividade}>{item.atividade}</Text>
-                  </ListItem.Title>
-                  <ListItem.Subtitle>
-                    <Text style={estilos.textoHorario}>
-                      {` Fim: ${item.horafim}`}
-                    </Text>
-                  </ListItem.Subtitle>
-                </ListItem.Content>
-              </ListItem>
-            ))}
+    {atividadesTardeHoje.map((item, index) => (
+      <View style={estilos.linha} key={item.id}>
+        <CheckBox
+          containerStyle={estilos.check}
+          checkedIcon={<Icon name="check" size={24} color="green" />}
+          uncheckedIcon={<Icon name="check" size={24} color="transparent" />}
+          checked={selecionadoTarde[index]}
+          onPress={() => {
+            const novoSelecionadoTarde = [...selecionadoTarde];
+            novoSelecionadoTarde[index] = !selecionadoTarde[index];
+            setSelecionadoTarde(novoSelecionadoTarde);
+          }}
+        />
+
+        <TouchableOpacity
+          style={[
+            estilos.caixaAtividade,
+            selecionadoTarde[index] && estilos.caixaAtividadeSelecionada,
+          ]}
+          onPress={() => {
+            props.navigation.navigate("Detalhes", {
+              atividadeId: item.id,
+            });
+          }}
+        >
+          <View style={estilos.infoCaixa}>
+            <Text style={estilos.textoHorario}>
+              {`Início: ${item.horainicio}`}
+            </Text>
+            <Text style={estilos.textoAtividade}>{item.atividade}</Text>
+            <Text style={estilos.textoHorario}>{` Fim: ${item.horafim}`}</Text>
           </View>
+        </TouchableOpacity>
+      </View>
+    ))}
+  </View>
 
-          <View style={estilos.divisaoParteDia}>
-            <Image style={estilos.imgHora} source={NoitePng} />
+  <View style={estilos.divisaoParteDia}>
+    <Image style={estilos.imgHora} source={NoitePng} />
 
-            {atividadesNoiteHoje.map((item) => (
-              <ListItem
-                style={estilos.caixaAtividade}
-                key={item.id}
-                bottomDivider
-                onPress={() => {
-                  props.navigation.navigate("Detalhes", {
-                    atividadeId: item.id,
-                  });
-                }}
-              >
-                <ListItem.Content style={estilos.infoCaixa}>
-                  <ListItem.Subtitle>
-                    <Text style={estilos.textoHorario}>
-                      {`Início: ${item.horainicio}`}
-                    </Text>
-                  </ListItem.Subtitle>
-                  <ListItem.Title style={estilos.textoAtividade}>
-                    <Text style={estilos.textoAtividade}>{item.atividade}</Text>
-                  </ListItem.Title>
-                  <ListItem.Subtitle>
-                    <Text style={estilos.textoHorario}>
-                      {` Fim: ${item.horafim}`}
-                    </Text>
-                  </ListItem.Subtitle>
-                </ListItem.Content>
-              </ListItem>
-            ))}
+    {atividadesNoiteHoje.map((item, index) => (
+      <View style={estilos.linha} key={item.id}>
+        <CheckBox
+          containerStyle={estilos.check}
+          checkedIcon={<Icon name="check" size={24} color="green" />}
+          uncheckedIcon={<Icon name="check" size={24} color="transparent" />}
+          checked={selecionadoNoite[index]}
+          onPress={() => {
+            const novoSelecionadoNoite = [...selecionadoNoite];
+            novoSelecionadoNoite[index] = !selecionadoNoite[index];
+            setSelecionadoNoite(novoSelecionadoNoite);
+          }}
+        />
+
+        <TouchableOpacity
+          style={[
+            estilos.caixaAtividade,
+            selecionadoNoite[index] && estilos.caixaAtividadeSelecionada,
+          ]}
+          onPress={() => {
+            props.navigation.navigate("Detalhes", {
+              atividadeId: item.id,
+            });
+          }}
+        >
+          <View style={estilos.infoCaixa}>
+            <Text style={estilos.textoHorario}>
+              {`Início: ${item.horainicio}`}
+            </Text>
+            <Text style={estilos.textoAtividade}>{item.atividade}</Text>
+            <Text style={estilos.textoHorario}>{` Fim: ${item.horafim}`}</Text>
           </View>
-        </ScrollView>
+        </TouchableOpacity>
+      </View>
+    ))}
+  </View>
+</ScrollView>
       ) : (
         <ScrollView style={estilos.contentAtividade}>
-          <View style={estilos.divisaoParteDia}>
-            <Image style={estilos.imgHora} source={DiaPng} />
+  <View style={estilos.divisaoParteDia}>
+    <Image style={estilos.imgHora} source={DiaPng} />
 
-            {atividadesOutrosDiasManha.map((item) => (
-              <ListItem
-                style={estilos.caixaAtividade}
-                key={item.id}
-                bottomDivider
-                onPress={() => {
-                  props.navigation.navigate("Detalhes", {
-                    atividadeId: item.id,
-                  });
-                }}
-              >
-                <ListItem.Content style={estilos.infoCaixa}>
-                  <ListItem.Subtitle>
-                    <Text style={estilos.textoHorario}>
-                      {`Início: ${item.horainicio}`}
-                    </Text>
-                  </ListItem.Subtitle>
-                  <ListItem.Title style={estilos.textoAtividade}>
-                    <Text style={estilos.textoAtividade}>{item.atividade}</Text>
-                  </ListItem.Title>
-                  <ListItem.Subtitle>
-                    <Text style={estilos.textoHorario}>
-                      {` Fim: ${item.horafim}`}
-                    </Text>
-                  </ListItem.Subtitle>
-                </ListItem.Content>
-              </ListItem>
-            ))}
+    {atividadesOutrosDiasManha.map((item, index) => (
+      <View style={estilos.linha} key={item.id}>
+        <CheckBox
+          containerStyle={estilos.check}
+          checkedIcon={<Icon name="check" size={24} color="green" />}
+          uncheckedIcon={<Icon name="check" size={24} color="transparent" />}
+          checked={selecionadoOutrosDiasManha[index]}
+          onPress={() => {
+            const novoSelecionadoOutrosDiasManha = [
+              ...selecionadoOutrosDiasManha,
+            ];
+            novoSelecionadoOutrosDiasManha[index] =
+              !selecionadoOutrosDiasManha[index];
+            setSelecionadoOutrosDiasManha(novoSelecionadoOutrosDiasManha);
+          }}
+        />
+
+        <TouchableOpacity
+          style={[
+            estilos.caixaAtividade,
+            selecionadoOutrosDiasManha[index] &&
+              estilos.caixaAtividadeSelecionada,
+          ]}
+          onPress={() => {
+            props.navigation.navigate("Detalhes", {
+              atividadeId: item.id,
+            });
+          }}
+        >
+          <View style={estilos.infoCaixa}>
+            <Text style={estilos.textoHorario}>
+              {`Início: ${item.horainicio}`}
+            </Text>
+            <Text style={estilos.textoAtividade}>{item.atividade}</Text>
+            <Text style={estilos.textoHorario}>{` Fim: ${item.horafim}`}</Text>
           </View>
+        </TouchableOpacity>
+      </View>
+    ))}
+  </View>
 
-          <View style={estilos.divisaoParteDia}>
-            <Image style={estilos.imgHora} source={TardePng} />
+  <View style={estilos.divisaoParteDia}>
+    <Image style={estilos.imgHora} source={TardePng} />
 
-            {atividadesOutrosDiasTarde.map((item) => (
-              <ListItem
-                style={estilos.caixaAtividade}
-                key={item.id}
-                bottomDivider
-                onPress={() => {
-                  props.navigation.navigate("Detalhes", {
-                    atividadeId: item.id,
-                  });
-                }}
-              >
-                <ListItem.Content style={estilos.infoCaixa}>
-                  <ListItem.Subtitle>
-                    <Text style={estilos.textoHorario}>
-                      {`Início: ${item.horainicio}`}
-                    </Text>
-                  </ListItem.Subtitle>
-                  <ListItem.Title style={estilos.textoAtividade}>
-                    <Text style={estilos.textoAtividade}>{item.atividade}</Text>
-                  </ListItem.Title>
-                  <ListItem.Subtitle>
-                    <Text style={estilos.textoHorario}>
-                      {` Fim: ${item.horafim}`}
-                    </Text>
-                  </ListItem.Subtitle>
-                </ListItem.Content>
-              </ListItem>
-            ))}
+    {atividadesOutrosDiasTarde.map((item, index) => (
+      <View style={estilos.linha} key={item.id}>
+        <CheckBox
+          containerStyle={estilos.check}
+          checkedIcon={<Icon name="check" size={24} color="green" />}
+          uncheckedIcon={<Icon name="check" size={24} color="transparent" />}
+          checked={selecionadoOutrosDiasTarde[index]}
+          onPress={() => {
+            const novoSelecionadoOutrosDiasTarde = [
+              ...selecionadoOutrosDiasTarde,
+            ];
+            novoSelecionadoOutrosDiasTarde[index] =
+              !selecionadoOutrosDiasTarde[index];
+            setSelecionadoOutrosDiasTarde(novoSelecionadoOutrosDiasTarde);
+          }}
+        />
+
+        <TouchableOpacity
+          style={[
+            estilos.caixaAtividade,
+            selecionadoOutrosDiasTarde[index] &&
+              estilos.caixaAtividadeSelecionada,
+          ]}
+          onPress={() => {
+            props.navigation.navigate("Detalhes", {
+              atividadeId: item.id,
+            });
+          }}
+        >
+          <View style={estilos.infoCaixa}>
+            <Text style={estilos.textoHorario}>
+              {`Início: ${item.horainicio}`}
+            </Text>
+            <Text style={estilos.textoAtividade}>{item.atividade}</Text>
+            <Text style={estilos.textoHorario}>{` Fim: ${item.horafim}`}</Text>
           </View>
+        </TouchableOpacity>
+      </View>
+    ))}
+  </View>
 
-          <View style={estilos.divisaoParteDia}>
-            <Image style={estilos.imgHora} source={NoitePng} />
+  <View style={estilos.divisaoParteDia}>
+    <Image style={estilos.imgHora} source={NoitePng} />
 
-            {atividadesOutrosDiasNoite.map((item) => (
-              <ListItem
-                style={estilos.caixaAtividade}
-                key={item.id}
-                bottomDivider
-                onPress={() => {
-                  props.navigation.navigate("Detalhes", {
-                    atividadeId: item.id,
-                  });
-                }}
-              >
-                <ListItem.Content style={estilos.infoCaixa}>
-                  <ListItem.Subtitle>
-                    <Text style={estilos.textoHorario}>
-                      {`Início: ${item.horainicio}`}
-                    </Text>
-                  </ListItem.Subtitle>
-                  <ListItem.Title style={estilos.textoAtividade}>
-                    <Text style={estilos.textoAtividade}>{item.atividade}</Text>
-                  </ListItem.Title>
-                  <ListItem.Subtitle>
-                    <Text style={estilos.textoHorario}>
-                      {` Fim: ${item.horafim}`}
-                    </Text>
-                  </ListItem.Subtitle>
-                </ListItem.Content>
-              </ListItem>
-            ))}
+    {atividadesOutrosDiasNoite.map((item, index) => (
+      <View style={estilos.linha} key={item.id}>
+        <CheckBox
+          containerStyle={estilos.check}
+          checkedIcon={<Icon name="check" size={24} color="green" />}
+          uncheckedIcon={<Icon name="check" size={24} color="transparent" />}
+          checked={selecionadoOutrosDiasNoite[index]}
+          onPress={() => {
+            const novoSelecionadoOutrosDiasNoite = [
+              ...selecionadoOutrosDiasNoite,
+            ];
+            novoSelecionadoOutrosDiasNoite[index] =
+              !selecionadoOutrosDiasNoite[index];
+            setSelecionadoOutrosDiasNoite(novoSelecionadoOutrosDiasNoite);
+          }}
+        />
+
+        <TouchableOpacity
+          style={[
+            estilos.caixaAtividade,
+            selecionadoOutrosDiasNoite[index] &&
+              estilos.caixaAtividadeSelecionada,
+          ]}
+          onPress={() => {
+            props.navigation.navigate("Detalhes", {
+              atividadeId: item.id,
+            });
+          }}
+        >
+          <View style={estilos.infoCaixa}>
+            <Text style={estilos.textoHorario}>
+              {`Início: ${item.horainicio}`}
+            </Text>
+            <Text style={estilos.textoAtividade}>{item.atividade}</Text>
+            <Text style={estilos.textoHorario}>{` Fim: ${item.horafim}`}</Text>
           </View>
-        </ScrollView>
+        </TouchableOpacity>
+      </View>
+    ))}
+  </View>
+</ScrollView>
       )}
 
       <TouchableOpacity
@@ -395,6 +471,11 @@ const Planner = (props) => {
 export default Planner;
 
 const estilos = StyleSheet.create({
+  imgHora:{
+    width: 50,
+    height: 50,
+    marginLeft: 20
+  },
   container: {
     backgroundColor: "#FFF6EB",
     flex: 1,
@@ -520,22 +601,24 @@ const estilos = StyleSheet.create({
   divisaoParteDia: {
     width: "100%",
   },
-  imgHora: {
-    margin: 20,
+  linha:{
+    flexDirection:"row",
+    marginVertical: 5
   },
-  caixaAtividade: {
-    marginHorizontal: 20,
+  caixaAtividade:{
+    flexDirection:'row',
+    backgroundColor:"#fff",
     borderRadius: 16,
+    width:"80%",
   },
   infoCaixa: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
+    width:"100%",
+    flexDirection:"row",
+    justifyContent:"space-evenly",
+    alignItems:"center",
   },
-  textoAtividade: {
-    fontSize: 20,
-    color: "white",
+  caixaAtividadeSelecionada:{
+    opacity:0.5,
   },
-  textoHorario: {
-    color: "pink",
-  },
+  check:{  borderColor: '', borderRadius:1000, borderWidth: .5, transform: [{ scale: 0.7 }]}
 });

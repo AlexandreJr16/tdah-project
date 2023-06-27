@@ -5,7 +5,10 @@ import { firebase } from '../../config';
 import { useNavigation } from '@react-navigation/native';
 import Texto from '../component/Texto';
 
+import DataTimePickerModal from 'react-native-modal-datetime-picker'
+
 export default function CadastrarAtividade(props) {
+  
   const [state, setState] = useState({
     atividade: '',
     data: '',

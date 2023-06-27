@@ -33,7 +33,7 @@ export default function Estudos(props){
  
   <View style={estilos.row}>
       <View style={estilos.direcaotopmedic}>
-  <Texto style={estilos.nomeusuario}> Olá {name.name}</Texto>
+  <Texto style={estilos.nomeusuario}> Olá {name.name}!</Texto>
   <Texto style={estilos.titlemedicacao}>Estudos</Texto>
 </View>
  </View>

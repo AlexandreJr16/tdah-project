@@ -11,6 +11,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 export default function EditarMedicacao(props) {
     console.log(props)
  
+    
   const [medicamentos, setMedicamentos] = useState(null);
   const [novoTitulo, setNovoTitulo] = useState('');
   const [novaData, setNovaData] = useState('');
@@ -37,6 +38,8 @@ export default function EditarMedicacao(props) {
 
     return () => unsubscribe();
   }, []);
+
+  const [buttonText, setButtonText] = useState(data.data);
 
   const handleSalvar = () => {
     firebase.firestore().collection('medicamento')
@@ -81,11 +84,6 @@ export default function EditarMedicacao(props) {
 
   const handleConfirm = (date) => {
     setSelectedDate(date);
-    
-    /*alert("ano selecionada: " + date.getDate());
-    alert("ano selecionada: " + date.getFullYear());
-    alert("mês selecionado: " + date.getMonth());
-    alert("dia selecionado: " + date.getDay());*/
 
     var month = date.getMonth()+1;
     handleChangeDate(`${date.getDate()}/${month}/${date.getFullYear()}`);
