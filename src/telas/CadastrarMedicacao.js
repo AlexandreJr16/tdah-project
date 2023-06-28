@@ -6,8 +6,6 @@ import Texto from '../component/Texto';
 import TextoInput from '../component/TextoInput'
 
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { format } from 'date-fns';
-
 
 export default function CadastrarMedicacao(props){
     console.log(props)
