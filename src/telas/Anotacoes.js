@@ -11,7 +11,6 @@ import { useNavigation } from '@react-navigation/native';
 import Texto from '../component/Texto';
 
 export default function Anotações({route, props}){
-  console.log(props);
 
   const navigation = useNavigation();
   const [name, setName] = useState('') 
@@ -79,7 +78,7 @@ export default function Anotações({route, props}){
 
   <View style={estilos.row}>
       <View style={estilos.direcaotopmedic}>
-  <Texto style={estilos.nomeusuario}> Olá {name.name}</Texto>
+  <Texto style={estilos.nomeusuario}> Olá {name.name}!</Texto>
   <Texto style={estilos.titleanotacao}>Anotações</Texto>
 </View>
 
@@ -168,7 +167,7 @@ nomeusuario: {
 titleanotacao: {
     color: "#FABA73",
     fontSize: 33,
-    fontWeight: "600",
+    fontWeight: "bold",
     marginTop: 0,
     paddingTop: 0,
 },
@@ -231,7 +230,7 @@ notesView: {
 
 notestitulo: {
   fontSize: 15,
-  fontWeight: '600',
+  fontWeight: 'bold',
   marginBottom: 5, // Espaçamento inferior do título
 },
 

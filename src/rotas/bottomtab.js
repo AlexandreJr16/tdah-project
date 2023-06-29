@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons, FontAwesome5, FontAwesome } from '@expo/vector-icons';
 
 import Planner from '../telas/Planner';
-import Anotações from '../telas/Anotações';
+import Anotações from '../telas/Anotacoes';
 import Medicação from '../telas/Medicação';
 import Estudos from '../telas/Estudos';
 import Configurações from '../telas/Configurações';

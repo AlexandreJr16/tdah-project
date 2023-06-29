@@ -5,10 +5,9 @@ import { firebase } from '../../config';
 import { useNavigation } from '@react-navigation/native';
 import Texto from '../component/Texto';
 
-import DataTimePickerModal from 'react-native-modal-datetime-picker'
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 export default function CadastrarAtividade(props) {
-  
   const [state, setState] = useState({
     atividade: '',
     data: '',
@@ -36,6 +35,89 @@ export default function CadastrarAtividade(props) {
     }
   };
 
+  const [buttonText, setButtonText] = useState('Selecionar Data');
+
+  const [buttonTime1, setButtonTime1] = useState('Selecione Início');
+  
+  const [buttonTime2, setButtonTime2] = useState('Selecione Final');
+    
+  const [selectedDate, setSelectedDate] = useState(new Date());
+    
+  const [selectedTime1, setSelectedTime1] = useState();
+  
+  const [selectedTime2, setSelectedTime2] = useState();
+  
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+      
+  const [isTimePickerVisible1, setTimePickerVisibility1] = useState(false);
+  
+  const [isTimePickerVisible2, setTimePickerVisibility2] = useState(false);
+  
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const showTimePicker1 = () => {
+    setTimePickerVisibility1(true);
+  };
+
+  const hideTimePicker1 = () => {
+    setTimePickerVisibility1(false);
+  };
+
+  const showTimePicker2 = () => {
+    setTimePickerVisibility2(true);
+  };
+
+  const hideTimePicker2 = () => {
+    setTimePickerVisibility2(false);
+  };
+
+  const handleChangeDate = (date) => {
+    setState((prevState) => ({
+      ...prevState,
+      data: date,
+    }));
+  };
+
+  const handleConfirm = (date) => {
+    setSelectedDate(date);
+    
+    /*alert("ano selecionada: " + date.getDate());
+    alert("ano selecionada: " + date.getFullYear());
+    alert("mês selecionado: " + date.getMonth());
+    alert("dia selecionado: " + date.getDay());*/
+
+    var month = date.getMonth()+1;
+    handleChangeDate(`${date.getDate()}/${month}/${date.getFullYear()}`);
+    setButtonText(`${date.getDate()}/${month}/${date.getFullYear()}`);
+
+    hideDatePicker();
+  };
+
+  const handleConfirmTime1 = (time) => {
+    setSelectedTime1(time);
+
+    const timeString = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    handleChangeText('horainicio', timeString);
+    setButtonTime1(timeString)
+    hideTimePicker1();
+  };
+
+  const handleConfirmTime2 = (time) => {
+    setSelectedTime2(time);
+
+    const timeString = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    handleChangeText('horafim', timeString);
+    setButtonTime2(timeString)
+    hideTimePicker2();
+  };
+
+
   return (
     <View style={estilos.container}>
       <View style={estilos.containerformulario}>
@@ -57,29 +139,66 @@ export default function CadastrarAtividade(props) {
           onChangeText={(value) => handleChangeText('atividade', value)}
         />
 
-        <Texto style={estilos.titulo_data}>Data</Texto>
-        <TextInput
-          style={estilos.input_atividade}
-          onChangeText={(value) => handleChangeText('data', value)}
-        />
+        <View>
+          <Texto style={estilos.titulo_data}>Data</Texto>
+
+          <TouchableOpacity onPress={showDatePicker}>
+              <Texto style={estilos.input_atividade}>{buttonText}</Texto>
+          </TouchableOpacity>
+
+          <DateTimePickerModal
+              style={{width: "100%"}}
+              value={selectedDate} // Passe a data como objeto Date
+              isVisible={isDatePickerVisible}
+              mode="date"
+              format='DD/MM/YYYY'
+              onConfirm={handleConfirm}
+              onCancel={hideDatePicker}
+          />
+        </View>
 
         <View style={estilos.areahorario}>
           <View>
-        <Texto style={estilos.titulo_horarioinicio}>Horário de Início</Texto> 
-        <TextInput
-          style={estilos.input_horarioinicio}
-          onChangeText={(value) => handleChangeText('horainicio', value)}
-        />
-        </View>
+            <Texto style={estilos.titulo_horarioinicio}>Horário de Início</Texto> 
 
-        <View>
-     <Texto style={estilos.titulo_horariofim}>Horário do Fim</Texto>
-        <TextInput
-          style={estilos.input_horariofim}
-          
-          onChangeText={(value) => handleChangeText('horafim', value)}
-        />
-        </View>
+            <TouchableOpacity onPress={showTimePicker1}>
+              <Texto style={estilos.input_horarioinicio}>
+                {buttonTime1}
+              </Texto>
+            </TouchableOpacity>
+
+            <DateTimePickerModal
+              style={estilos.areahorario}
+              value={selectedTime1} // Passe a data como objeto Date
+              isVisible={isTimePickerVisible1}
+              mode="time"
+              format='MM:HH'
+              is24Hour
+              onConfirm={handleConfirmTime1}
+              onCancel={hideTimePicker1}
+            />
+          </View>
+
+          <View>
+            <Texto style={estilos.titulo_horarioinicio}>Horário do Fim</Texto> 
+
+            <TouchableOpacity onPress={showTimePicker2}>
+              <Texto style={estilos.input_horarioinicio}>
+                {buttonTime2}
+              </Texto>
+            </TouchableOpacity>
+
+            <DateTimePickerModal
+              style={estilos.areahorario}
+              value={selectedTime2} // Passe a data como objeto Date
+              isVisible={isTimePickerVisible2}
+              mode="time"
+              format='MM:HH'
+              is24Hour
+              onConfirm={handleConfirmTime2}
+              onCancel={hideTimePicker2}
+            />
+          </View>
         </View>
 
         <Texto style={estilos.titulo_descricao}>Descrição/Observações</Texto>

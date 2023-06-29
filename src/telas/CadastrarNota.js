@@ -4,8 +4,11 @@ import { AntDesign } from '@expo/vector-icons';
 import { firebase } from '../../config';
 
 import Texto from '../component/Texto';
+import TextoInput from '../component/TextoInput';
 
 export default function CadastrarNota(props) {
+  console.log(props);
+
   const [titulo, setTitulo] = useState('');
   const [note, setNote] = useState('');
 
@@ -21,7 +24,7 @@ export default function CadastrarNota(props) {
         setTitulo('');
         setNote('');
         Keyboard.dismiss();
-        props.navigation.navigate('Anotacoes');
+        props.navigation.navigate('Anotações');
       })
       .catch((error) => {
         alert(error);
@@ -35,20 +38,22 @@ export default function CadastrarNota(props) {
     <View style={estilos.container}>
    
       <View style={estilos.row}>
-        <TouchableOpacity onPress={() => props.navigation.navigate('Anotacoes')}>
+        <TouchableOpacity onPress={() => props.navigation.navigate('Anotações')}>
           <AntDesign style={estilos.iconvoltar} name="arrowleft" size={25} color="#FABA73" />
         </TouchableOpacity>
 
-        <TextInput
+        <TextoInput
           placeholder='Título'
+          placeholderTextColor='#FABA73'
           value={titulo}
           onChangeText={(text) => setTitulo(text)}
           style={estilos.inputTitulo}
         />
       </View>
 
-      <TextInput
+      <TextoInput
         placeholder='Nota'
+        placeholderTextColor='#FABA73'
         value={note}
         onChangeText={(text) => setNote(text)}
         style={estilos.inputNote}

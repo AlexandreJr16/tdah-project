@@ -14,6 +14,8 @@ import { firebase } from "../../config";
 import { ListItem, CheckBox } from "react-native-elements";
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import Texto from "../component/Texto";
+
 import DiaPng from "../../assets/dia2.png";
 import TardePng from "../../assets/tarde2.png";
 import NoitePng from "../../assets/noite2.png";
@@ -84,7 +86,10 @@ const Planner = (props) => {
           const { atividade, data, horainicio, horafim, descricao } =
             doc.data();
           const hora = parseInt(horainicio.split(":")[0]);
-          const hoje = new Date().toISOString().split("T")[0];
+          const hoje2 = new Date();
+          let month = hoje2.getMonth()+1;
+          const hoje = `${hoje2.getDate()}/${month}/${hoje2.getFullYear()}`
+
 
           if (data === hoje) {
             if (hora < 12) {
@@ -164,8 +169,8 @@ const Planner = (props) => {
     <View style={estilos.container}>
       <View style={estilos.row}>
         <View style={estilos.direcaotopplanner}>
-          <Text style={estilos.nomeusuario}>Olá {name.name}!</Text>
-          <Text style={estilos.titleplanner}>Planner</Text>
+          <Texto style={estilos.nomeusuario}>Olá {name.name}!</Texto>
+          <Texto style={estilos.titleplanner}>Planner</Texto>
         </View>
       </View>
       {selectedView === "Hoje" ? (
@@ -174,13 +179,13 @@ const Planner = (props) => {
             onPress={() => setSelectedView("Hoje")}
             style={estilos.btnSelect}
           >
-            <Text style={estilos.btnMenuText}>Hoje</Text>
+            <Texto style={estilos.btnMenuText}>Hoje</Texto>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => setSelectedView("Outro dia")}
             style={estilos.btnMenu}
           >
-            <Text style={estilos.btnMenuText}>Outro dia</Text>
+            <Texto style={estilos.btnMenuText}>Outro dia</Texto>
           </TouchableOpacity>
         </View>
       ) : (
@@ -189,13 +194,13 @@ const Planner = (props) => {
             onPress={() => setSelectedView("Hoje")}
             style={estilos.btnMenu}
           >
-            <Text style={estilos.btnMenuText}>Hoje</Text>
+            <Texto style={estilos.btnMenuText}>Hoje</Texto>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => setSelectedView("Outro dia")}
             style={estilos.btnSelect}
           >
-            <Text style={estilos.btnMenuText}>Outro dia</Text>
+            <Texto style={estilos.btnMenuText}>Outro dia</Texto>
           </TouchableOpacity>
         </View>
       )}
@@ -231,11 +236,11 @@ const Planner = (props) => {
           }}
         >
           <View style={estilos.infoCaixa}>
-            <Text style={estilos.textoHorario}>
+            <Texto style={estilos.textoHorario}>
               {`Início: ${item.horainicio}`}
-            </Text>
-            <Text style={estilos.textoAtividade}>{item.atividade}</Text>
-            <Text style={estilos.textoHorario}>{` Fim: ${item.horafim}`}</Text>
+            </Texto>
+            <Texto style={estilos.textoAtividade}>{item.atividade}</Texto>
+            <Texto style={estilos.textoHorario}>{` Fim: ${item.horafim}`}</Texto>
           </View>
         </TouchableOpacity>
       </View>
@@ -271,11 +276,11 @@ const Planner = (props) => {
           }}
         >
           <View style={estilos.infoCaixa}>
-            <Text style={estilos.textoHorario}>
+            <Texto style={estilos.textoHorario}>
               {`Início: ${item.horainicio}`}
-            </Text>
-            <Text style={estilos.textoAtividade}>{item.atividade}</Text>
-            <Text style={estilos.textoHorario}>{` Fim: ${item.horafim}`}</Text>
+            </Texto>
+            <Texto style={estilos.textoAtividade}>{item.atividade}</Texto>
+            <Texto style={estilos.textoHorario}>{` Fim: ${item.horafim}`}</Texto>
           </View>
         </TouchableOpacity>
       </View>
@@ -311,11 +316,11 @@ const Planner = (props) => {
           }}
         >
           <View style={estilos.infoCaixa}>
-            <Text style={estilos.textoHorario}>
+            <Texto style={estilos.textoHorario}>
               {`Início: ${item.horainicio}`}
-            </Text>
-            <Text style={estilos.textoAtividade}>{item.atividade}</Text>
-            <Text style={estilos.textoHorario}>{` Fim: ${item.horafim}`}</Text>
+            </Texto>
+            <Texto style={estilos.textoAtividade}>{item.atividade}</Texto>
+            <Texto style={estilos.textoHorario}>{` Fim: ${item.horafim}`}</Texto>
           </View>
         </TouchableOpacity>
       </View>
@@ -357,11 +362,11 @@ const Planner = (props) => {
           }}
         >
           <View style={estilos.infoCaixa}>
-            <Text style={estilos.textoHorario}>
+            <Texto style={estilos.textoHorario}>
               {`Início: ${item.horainicio}`}
-            </Text>
-            <Text style={estilos.textoAtividade}>{item.atividade}</Text>
-            <Text style={estilos.textoHorario}>{` Fim: ${item.horafim}`}</Text>
+            </Texto>
+            <Texto style={estilos.textoAtividade}>{item.atividade}</Texto>
+            <Texto style={estilos.textoHorario}>{` Fim: ${item.horafim}`}</Texto>
           </View>
         </TouchableOpacity>
       </View>
@@ -401,11 +406,11 @@ const Planner = (props) => {
           }}
         >
           <View style={estilos.infoCaixa}>
-            <Text style={estilos.textoHorario}>
+            <Texto style={estilos.textoHorario}>
               {`Início: ${item.horainicio}`}
-            </Text>
-            <Text style={estilos.textoAtividade}>{item.atividade}</Text>
-            <Text style={estilos.textoHorario}>{` Fim: ${item.horafim}`}</Text>
+            </Texto>
+            <Texto style={estilos.textoAtividade}>{item.atividade}</Texto>
+            <Texto style={estilos.textoHorario}>{` Fim: ${item.horafim}`}</Texto>
           </View>
         </TouchableOpacity>
       </View>
@@ -445,11 +450,11 @@ const Planner = (props) => {
           }}
         >
           <View style={estilos.infoCaixa}>
-            <Text style={estilos.textoHorario}>
+            <Texto style={estilos.textoHorario}>
               {`Início: ${item.horainicio}`}
-            </Text>
-            <Text style={estilos.textoAtividade}>{item.atividade}</Text>
-            <Text style={estilos.textoHorario}>{` Fim: ${item.horafim}`}</Text>
+            </Texto>
+            <Texto style={estilos.textoAtividade}>{item.atividade}</Texto>
+            <Texto style={estilos.textoHorario}>{` Fim: ${item.horafim}`}</Texto>
           </View>
         </TouchableOpacity>
       </View>

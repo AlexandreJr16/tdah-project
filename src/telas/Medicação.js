@@ -141,7 +141,7 @@ const Medicação = (props) => {
           setMedicamentosTardeOutrosDias(medicamentosTardeOutrosDias);
           setMedicamentosNoiteOutrosDias(medicamentosNoiteOutrosDias);
         });
-        
+    
           return () => unsubscribe();
   }, []);
 
@@ -152,53 +152,44 @@ return (
   <View style={estilos.container}>
 
   <View style={estilos.row}>
-      <View style={estilos.direcaotopmedic}>
-  <Texto style={estilos.nomeusuario}> Olá {name}!</Texto>
-  <Texto style={estilos.titlemedicacao}>Medicação</Texto>
-</View>
- </View>
-
-
+    <View style={estilos.direcaotopmedic}>
+      <Texto style={estilos.nomeusuario}> Olá {name}!</Texto>
+      <Texto style={estilos.titlemedicacao}>Medicação</Texto>
+    </View>
+  </View>
 
  {selectedView === "Hoje" ? (
-
         <View style={estilos.btnsAlterMenu}>
-          <TouchableOpacity
-            onPress={() => setSelectedView("Hoje")}
-            style={estilos.btnSelect}
-          >
+          <TouchableOpacity onPress={() => setSelectedView("Hoje")} style={estilos.btnSelect}>
             <Texto style={estilos.btnMenuText}>Hoje</Texto>
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setSelectedView("Outro dia")}
-            style={estilos.btnMenu}
-          >
+
+          <TouchableOpacity onPress={() => setSelectedView("Outro dia")} style={estilos.btnMenu}>
             <Texto style={estilos.btnMenuText}>Outro dia</Texto>
           </TouchableOpacity>
         </View>
       ) : (
         <View style={estilos.btnsAlterMenu}>
-          <TouchableOpacity
-            onPress={() => setSelectedView("Hoje")}
-            style={estilos.btnMenu}
-          >
-            <Text style={estilos.btnMenuText}>Hoje</Text>
+          <TouchableOpacity onPress={() => setSelectedView("Hoje")} style={estilos.btnMenu}>
+            <Texto style={estilos.btnMenuText}>Hoje</Texto>
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setSelectedView("Outro dia")}
-            style={estilos.btnSelect}
-          >
-            <Text style={estilos.btnMenuText}>Outro dia</Text>
+
+          <TouchableOpacity onPress={() => setSelectedView("Outro dia")} style={estilos.btnSelect}>
+            <Texto style={estilos.btnMenuText}>Outro dia</Texto>
           </TouchableOpacity>
         </View>
-      )}
+  )}
+
  {selectedView== "Hoje" ?(
-   <ScrollView style={estilos.contentAtividade}>
-   <View style={estilos.divisaoParteDia}>
-    <Image style={estilos.imgHora} source={DiaPng} />
+   <ScrollView>
+   <View>
+   <View style={estilos.tituloSecao}>
+      <Image style={estilos.imgHora} source={DiaPng} />
+      <Texto style={{fontSize: 24}}>Manhã</Texto>
+    </View>
 
     {medicamentosManhaHoje.map((item, index) => (
-      <View key={item.id}>
+      <View style={estilos.BoxInfo} key={item.id}>
         <CheckBox
           containerStyle={estilos.check}
           checkedIcon={<Icon name="check" size={24} color="green" />}
@@ -221,8 +212,8 @@ return (
             });
           }}>
           <View style={estilos.atividadeItem}>
-            <Text style={estilos.textoHorario}>{`Início: ${item.hora}`}</Text>
-            <Text style={estilos.textoAtividade}>{item.medicacao}</Text>
+            <Texto style={estilos.textoHorario}>{`Início: ${item.hora}`}</Texto>
+            <Texto style={estilos.textoAtividade}>{item.medicacao}</Texto>
             {/*<Text style={estilos.textoHorario}>{` Fim: ${item.horafim}`}</Text> */}
           </View>
         </TouchableOpacity>
@@ -230,11 +221,14 @@ return (
     ))}
   </View>
 
-  <View style={estilos.divisaoParteDia}>
+  <View>
+    <View style={estilos.tituloSecao}>
       <Image style={estilos.imgHora} source={TardePng} />
+      <Texto style={{fontSize: 24}}>Tarde</Texto>
+    </View>
 
       {medicamentosTardeHoje.map((item, index) => (
-        <View key={item.id}>
+        <View style={estilos.BoxInfo} key={item.id}>
           <CheckBox
             containerStyle={estilos.check}
             checkedIcon={<Icon name="check" size={24} color="green" />}
@@ -266,11 +260,15 @@ return (
       ))}
     </View>
 
-    <View style={estilos.divisaoParteDia}>
-      <Image style={estilos.imgHora} source={NoitePng} />
+    <View>
+      <View style={estilos.tituloSecao}>
+        <Image style={estilos.imgHora} source={NoitePng} />
+        <Texto style={{fontSize: 24}}>Noite</Texto>
+      </View>
+      
 
       {medicamentosNoiteHoje.map((item, index) => (
-        <View key={item.id}>
+        <View style={estilos.BoxInfo} key={item.id}>
           <CheckBox
             containerStyle={estilos.check}
             checkedIcon={<Icon name="check" size={24} color="green" />}
@@ -304,9 +302,12 @@ return (
  </ScrollView>
 
 ) : (
-  <ScrollView style={estilos.contentAtividade}>
- <View style={estilos.divisaoParteDia}>
-    <Image style={estilos.imgHora} source={DiaPng} />
+  <ScrollView>
+ <View>
+    <View style={estilos.tituloSecao}>
+      <Image style={estilos.imgHora} source={DiaPng} />
+      <Texto style={{fontSize: 24}}>Manhã</Texto>
+    </View>
 
     {medicamentosManhaOutrosDias.map((item, index) => (
       <View style={estilos.BoxInfo} key={item.id}>
@@ -337,7 +338,7 @@ return (
             });
           }}>
           <View style={estilos.atividadeItem}>
-            <Text style={estilos.textoHorario}>{`Início: ${item.hora}`}</Text>
+            <Text style={estilos.textoHorario}>{`Horário: ${item.hora}`}</Text>
             <Text style={estilos.textoAtividade}>{item.medicacao}</Text>
             {/* <Text style={estilos.textoHorario}>{` Fim: ${item.horafim}`}</Text> */}
           </View>
@@ -345,12 +346,18 @@ return (
       </View>
     ))}
   </View>
-  <View style={estilos.divisaoParteDia}>
+  <View>
+    <View style={estilos.tituloSecao}>
       <Image style={estilos.imgHora} source={TardePng} />
+      <Texto style={{fontSize: 24}}>Tarde</Texto>
+    </View>
 
       {medicamentosTardeOutrosDias.map((item, index) => (
         <View style={estilos.BoxInfo} key={item.id}>
           <CheckBox
+            containerStyle={estilos.check}
+            checkedIcon={<Icon name="check" size={24} color="green" />}
+            uncheckedIcon={<Icon name="check" size={24} color="transparent" />}
             checked={selecionadoTardeOutrosDias[index]}
             onPress={() => {
               const novoSelecionadoTardeOutrosDias = [
@@ -383,12 +390,18 @@ return (
       ))}
     </View>
 
-    <View style={estilos.divisaoParteDia}>
-      <Image style={estilos.imgHora} source={NoitePng} />
+    <View>
+      <View style={estilos.tituloSecao}>
+        <Image style={estilos.imgHora} source={NoitePng} />
+        <Texto style={{fontSize: 24}}>Noite</Texto>
+      </View>
 
       {medicamentosNoiteOutrosDias.map((item, index) => (
         <View style={estilos.BoxInfo} key={item.id}>
           <CheckBox
+            containerStyle={estilos.check}
+            checkedIcon={<Icon name="check" size={24} color="green" />}
+            uncheckedIcon={<Icon name="check" size={24} color="transparent" />}
             checked={selecionadoNoiteOutrosDias[index]}
             onPress={() => {
               const novoSelecionadoNoiteOutrosDias = [
@@ -434,6 +447,26 @@ return (
 export default Medicação;
 
 const estilos = StyleSheet.create({
+caixaAtividade: {
+  width: "100%",
+},
+tituloSecao: {
+    width: "100%",
+    flexDirection: "row", 
+    alignItems: "center",
+    gap: "10"
+},
+check:{
+  borderColor: "transparent",
+  borderRadius:1000, 
+  borderWidth: 0.5,
+  transform: [{ scale: 0.5 }],
+  backgroundColor: "#FFF6EB"
+},
+
+caixaAtividadeSelecionada:{
+  opacity:0.25,
+},
 imgHora:{
   //aspectRatio: "1/1",
   width: 50,
@@ -531,8 +564,15 @@ btnMenuText: {
 },
 BoxInfo:{
   flexDirection:"row",
-  width:"100%"
+  alignSelf: "center",
+  alignItems: "center",
+  margin: "1.5%",
+  width:"90%",
+  backgroundColor: "#8FE3CA",
+  borderRadius: "10",
+  shadowColor: 'gray',
+  shadowOffset: {width: 0, height: 2},
+  shadowOpacity: 0.8,
+  shadowRadius: 2,
 },
-caixaAtividade:{
-  backgroundColor:"#FFFFFF",}
 });
