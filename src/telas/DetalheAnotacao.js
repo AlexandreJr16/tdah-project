@@ -40,7 +40,7 @@ export default function DetalheAnotacao({route, props}){
             nota: noteText,
         })
         .then(() => {
-            navigation.navigate('Anotacoes');
+            navigation.navigate('Anotações');
         })
         .catch((error) =>{
             alert(error);
@@ -58,7 +58,7 @@ export default function DetalheAnotacao({route, props}){
     .doc(route.params.item.id)
     .delete()
     .then(() => {
-        navigation.navigate('Anotacoes');
+        navigation.navigate('Anotações');
     })
     .catch((error) => {
         alert(error);
@@ -71,7 +71,7 @@ export default function DetalheAnotacao({route, props}){
   <View style={estilos.container}>
   <View style={estilos.row}>
 
-<TouchableOpacity onPress={() => navigation.navigate('Anotacoes')}>
+<TouchableOpacity onPress={() => navigation.navigate('Anotações')}>
 <AntDesign style={estilos.iconvoltar} name="arrowleft" size={25} color="#FABA73"  />
 </TouchableOpacity>
 
